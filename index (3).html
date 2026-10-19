@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Yeyo Úraga · Béisbol</title>
+<meta name="theme-color" content="#0b1f4b">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="logo.png">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0b1f4b;--sky:#7fb0ee;--blue:#0a63b8;--gold:#f2b43a;--bg:#050a1a;--card:#0f1b3f;--tx:#f2f6ff;--fh:Oswald,Impact,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,sans-serif;color:var(--tx);padding-bottom:96px;min-height:100vh;
+background:repeating-linear-gradient(135deg,transparent 0 60px,rgba(127,176,238,.05) 60px 100px),radial-gradient(circle at 50% -10%,#14357a,var(--bg) 60%) fixed}
+header{position:sticky;top:0;z-index:5;padding:10px 14px;padding-top:calc(10px + env(safe-area-inset-top));display:flex;align-items:center;gap:12px;
+background:linear-gradient(135deg,#0b1f4b,#0a63b8 70%,#2a8be0);border-bottom:3px solid var(--gold);box-shadow:0 6px 24px rgba(0,0,0,.5)}
+header img{height:56px;filter:drop-shadow(0 3px 6px rgba(0,0,0,.5))}
+header h1{font:700 22px var(--fh);margin:0;flex:1;text-transform:uppercase;letter-spacing:2px;line-height:1.05}
+header .sm{color:var(--gold);letter-spacing:1px;font-size:11px}
+main{padding:14px;max-width:760px;margin:auto;animation:up .5s ease}
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes glow{50%{box-shadow:0 0 28px rgba(242,180,58,.8)}}
+.hero{position:relative;overflow:hidden;border-radius:20px;padding:26px 18px;text-align:center;margin-bottom:14px;
+background:linear-gradient(160deg,rgba(10,99,184,.85),rgba(11,31,75,.95)),repeating-linear-gradient(135deg,#7fb0ee 0 18px,#fff 18px 36px);border:2px solid var(--gold);box-shadow:0 10px 30px rgba(10,99,184,.5)}
+.hero img{height:110px;filter:drop-shadow(0 6px 12px rgba(0,0,0,.6));animation:up .8s ease}
+.hero h2{font:700 34px var(--fh);color:#fff;margin:8px 0 0;letter-spacing:3px;text-shadow:0 3px 0 #0b1f4b}
+.hero p{margin:4px 0 0;color:var(--gold);font:500 14px var(--fh);letter-spacing:3px;text-transform:uppercase}
+nav{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));display:flex;border-radius:22px;padding:6px;z-index:9;
+background:rgba(11,31,75,.92);backdrop-filter:blur(10px);border:2px solid var(--gold);box-shadow:0 8px 30px rgba(0,0,0,.6)}
+nav button{flex:1;background:none;border:0;color:var(--sky);padding:8px 2px;font:500 11px var(--fh);letter-spacing:1px;text-transform:uppercase;border-radius:16px;transition:.2s}
+nav button.on{background:linear-gradient(135deg,var(--gold),#f08a24);color:#1a1200;transform:translateY(-4px);box-shadow:0 6px 14px rgba(240,138,36,.5)}
+.card{background:linear-gradient(145deg,#142652,#0c1636);border-radius:16px;padding:14px;margin:12px 0;border:1px solid #27407f;border-left:5px solid var(--gold);box-shadow:0 6px 18px rgba(0,0,0,.35);animation:up .5s ease}
+button.b,.card button,.hero button{background:linear-gradient(90deg,var(--gold),#f08a24);border:0;border-radius:12px;padding:10px 16px;font:700 14px var(--fh);letter-spacing:1px;text-transform:uppercase;color:#1a1200;box-shadow:0 4px 12px rgba(240,138,36,.4);transition:.15s}
+button:active{transform:scale(.95)}
+button.g,.card button.g{background:#1d2c5a;color:var(--tx);box-shadow:none}
+input,select,textarea{width:100%;padding:11px;border-radius:12px;border:1px solid #2a3c75;background:#081027;color:var(--tx);margin:4px 0;font-size:15px}
+input:focus,textarea:focus{outline:2px solid var(--gold)}
+.cats{display:flex;gap:6px;margin:12px 0}
+.cats button{flex:1;background:#14265a;color:var(--sky);border:1px solid #2a3c75;border-radius:14px;padding:10px 0;font:700 15px var(--fh);letter-spacing:1px;transition:.2s}
+.cats button.on{background:linear-gradient(135deg,var(--sky),var(--blue));color:#fff;border-color:#fff;box-shadow:0 0 16px rgba(127,176,238,.7);transform:scale(1.06)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.pl{text-align:center;position:relative;border-left:1px solid #27407f!important;border-top:4px solid var(--gold);padding-top:22px;transition:.25s}
+.pl:hover{transform:translateY(-5px) scale(1.03)}
+.pl::before{content:"★";position:absolute;top:-4px;right:10px;background:var(--gold);color:#5a3a00;width:28px;height:34px;display:flex;justify-content:center;align-items:flex-end;padding-bottom:6px;border-radius:0 0 14px 14px;font-size:15px}
+.pl img,.ph{width:118px;height:118px;border-radius:50%;object-fit:cover;border:4px solid var(--gold);background:#1d2c5a;display:block;margin:0 auto 10px;animation:glow 3s infinite}
+.pl b{font:700 17px var(--fh);text-transform:uppercase;letter-spacing:1px}
+.row{display:flex;align-items:center;gap:10px;justify-content:space-between;padding:9px 0;border-bottom:1px solid #1d2c5a}
+.sm{font-size:12px;opacity:.75}
+h2{font:700 24px var(--fh);color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin:8px 0;text-shadow:0 2px 8px rgba(242,180,58,.35)}
+.game{display:flex;gap:12px;align-items:center}.date{min-width:64px;text-align:center;background:linear-gradient(160deg,var(--blue),var(--navy));border:2px solid var(--gold);border-radius:12px;padding:6px;font:700 13px var(--fh);text-transform:uppercase}.date big{display:block;font-size:30px;color:var(--gold);line-height:1}
+.vs{font:700 18px var(--fh);text-transform:uppercase}
+</style></head><body>
+<header><img src="logo.png" alt=""><h1>Yeyo Úraga<br><span class="sm">Béisbol · Guayas</span></h1><button class="g card" id="out" style="display:none;margin:0;padding:8px">Salir</button></header>
+<main id="m"></main>
+<nav id="nav" style="display:none"></nav>
+<script>
+// ===== CONFIGURA AQUÍ (Supabase > Project Settings > API) =====
+const SUPA_URL="sb_publishable_StYxacRItCa6unkzZ9u3qg_XLl9s8pw
+", SUPA_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5oaW5kbWhyZGNuY2hubWFubGZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzODY0MjYsImV4cCI6MjEwNzk2MjQyNn0.505V3aZ3GJ-7gLxFR718YQ3Kg4tK-5621mJXx8Uxdvs";
+// ===============================================================
+const sb=supabase.createClient(SUPA_URL,SUPA_KEY);
+const CATS=["Sub 6","Sub 8","Sub 10","Sub 16"];
+let coach=false,tab="avisos",cat=CATS[0],day=new Date().toISOString().slice(0,10);
+const hero=(t,p)=>`<div class="hero"><img src="logo.png"><h2>${t}</h2><p>${p}</p></div>`;
+const $=id=>document.getElementById(id),m=$("m");
+const esc=s=>(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const TABS=[["avisos","📢 Avisos"],["destacados","⭐ Destacados"],["asistencia","✅ Asistencia"],["torneos","🏆 Juegos"]];
+
+async function init(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session)return login();
+  const {data}=await sb.from("profiles").select("role").eq("id",session.user.id).single();
+  coach=data?.role==="coach";
+  $("out").style.display="block";$("out").onclick=async()=>{await sb.auth.signOut();location.reload()};
+  $("nav").style.display="flex";go(tab);
+}
+function login(){
+  m.innerHTML=hero("Bienvenidos","Familia del béisbol")+`<div class="card"><h2>Ingresar</h2><input id="e" type="email" placeholder="Correo"><input id="p" type="password" placeholder="Contraseña (mín. 6)">
+  <p><button class="b" id="in">Entrar</button> <button class="g card" id="up" style="padding:9px 14px;margin:0">Crear cuenta (padres)</button></p><p id="er" class="sm"></p></div>`;
+  const run=async f=>{const {error}=await sb.auth[f]({email:$("e").value,password:$("p").value});
+    if(error)$("er").textContent=error.message;else if(f==="signUp")$("er").textContent="Cuenta creada. Revisa tu correo si pide confirmación, luego entra.";else init()};
+  $("in").onclick=()=>run("signInWithPassword");$("up").onclick=()=>run("signUp");
+}
+function go(t){tab=t;$("nav").innerHTML=TABS.map(([k,l])=>`<button class="${k===t?"on":""}" onclick="go('${k}')">${l}</button>`).join("");
+  ({avisos,destacados,asistencia,torneos})[t]()}
+const catBar=()=>`<div class="cats">${CATS.map(c=>`<button class="${c===cat?"on":""}" onclick="cat='${c}';go(tab)">${c}</button>`).join("")}</div>`;
+
+async function avisos(){
+  const {data=[]}=await sb.from("notices").select("*").order("created_at",{ascending:false});
+  m.innerHTML=hero("Yeyo Úraga","Pasión · Disciplina · Béisbol")+`<h2>📢 Avisos</h2>`+(coach?`<div class="card"><input id="t" placeholder="Título"><textarea id="b" rows="3" placeholder="Mensaje"></textarea><button id="add">Publicar</button></div>`:"")+
+  data.map(n=>`<div class="card"><b>${esc(n.title)}</b><p>${esc(n.body)}</p><span class="sm">${new Date(n.created_at).toLocaleDateString()}</span>${coach?` <button class="g" onclick="del('notices',${n.id},avisos)">Borrar</button>`:""}</div>`).join("")||"<p>Sin avisos.</p>";
+  if(coach)$("add").onclick=async()=>{await sb.from("notices").insert({title:$("t").value,body:$("b").value});avisos()};
+}
+async function del(t,id,fn){if(confirm("¿Borrar?")){await sb.from(t).delete().eq("id",id);fn()}}
+
+async function destacados(){
+  const {data=[]}=await sb.from("featured").select("*").eq("category",cat).order("id");
+  m.innerHTML=`<h2>⭐ Jugadores destacados</h2>${catBar()}`+(coach?`<div class="card"><input id="n" placeholder="Nombre"><input id="f" type="file" accept="image/*"><button id="add">Agregar</button></div>`:"")+
+  `<div class="grid">${data.map(p=>`<div class="card pl">${p.photo?`<img src="${p.photo}">`:`<div class="ph"></div>`}<b>${esc(p.name)}</b>${coach?`<p><button class="g" onclick="edit(${p.id},'${esc(p.name).replace(/'/g,"\\'")}')">Editar</button> <button class="g" onclick="del('featured',${p.id},destacados)">✕</button></p>`:""}</div>`).join("")||"<p>Aún no hay destacados.</p>"}</div>`;
+  if(coach)$("add").onclick=async()=>{const photo=await shrink($("f").files[0]);await sb.from("featured").insert({category:cat,name:$("n").value,photo});destacados()};
+}
+async function edit(id,name){
+  const n=prompt("Nombre:",name);if(n===null)return;
+  const i=document.createElement("input");i.type="file";i.accept="image/*";
+  i.onchange=async()=>{const u={name:n};if(i.files[0])u.photo=await shrink(i.files[0]);await sb.from("featured").update(u).eq("id",id);destacados()};
+  if(confirm("¿Cambiar también la foto?"))i.click();else{await sb.from("featured").update({name:n}).eq("id",id);destacados()}
+}
+function shrink(f){return new Promise(r=>{if(!f)return r(null);const im=new Image();im.onload=()=>{const c=document.createElement("canvas"),s=300,k=Math.min(s/im.width,s/im.height,1);c.width=im.width*k;c.height=im.height*k;c.getContext("2d").drawImage(im,0,0,c.width,c.height);r(c.toDataURL("image/jpeg",.8))};im.src=URL.createObjectURL(f)})}
+
+async function asistencia(){
+  const {data:pl=[]}=await sb.from("players").select("*").eq("category",cat).order("name");
+  const {data:at=[]}=await sb.from("attendance").select("*").eq("day",day).in("player_id",pl.map(p=>p.id));
+  const on=Object.fromEntries(at.map(a=>[a.player_id,a.present]));
+  m.innerHTML=`<h2>✅ Asistencia</h2>${catBar()}<input type="date" id="d" value="${day}">`+(coach?`<div class="card"><input id="n" placeholder="Nuevo jugador"><button id="add">Agregar jugador</button></div>`:"")+
+  `<div class="card">${pl.map(p=>`<div class="row"><span>${esc(p.name)}</span>${coach?`<button class="${on[p.id]?"":"g"}" onclick="mark(${p.id},${!on[p.id]})">${on[p.id]?"✔ Presente":"Ausente"}</button>`:`<span>${on[p.id]?"✔ Presente":"—"}</span>`}</div>`).join("")||"Sin jugadores."}</div>`;
+  $("d").onchange=e=>{day=e.target.value;asistencia()};
+  if(coach)$("add").onclick=async()=>{await sb.from("players").insert({category:cat,name:$("n").value});asistencia()};
+}
+async function mark(id,v){await sb.from("attendance").upsert({player_id:id,day,present:v},{onConflict:"player_id,day"});asistencia()}
+
+async function torneos(){
+  const {data=[]}=await sb.from("games").select("*").eq("category",cat).order("day");
+  m.innerHTML=`<h2>🏆 Horario de juegos</h2>${catBar()}`+(coach?`<div class="card"><input id="d" type="date"><input id="h" placeholder="Hora (ej. 09:00)"><input id="r" placeholder="Rival"><input id="l" placeholder="Lugar"><button id="add">Agregar juego</button></div>`:"")+
+  data.map(g=>{const d=new Date(g.day+"T12:00");return `<div class="card game"><div class="date"><span>${d.toLocaleDateString("es",{month:"short"})}</span><big>${d.getDate()}</big><span>${esc(g.time)}</span></div><div style="flex:1"><div class="vs">⚾ vs ${esc(g.rival)}</div><span class="sm">📍 ${esc(g.place)}</span></div>${coach?`<button class="g" onclick="del('games',${g.id},torneos)">✕</button>`:""}</div>`}).join("")||"<p>Sin juegos programados.</p>";
+  if(coach)$("add").onclick=async()=>{await sb.from("games").insert({category:cat,day:$("d").value,time:$("h").value,rival:$("r").value,place:$("l").value});torneos()};
+}
+init();
+</script></body></html>
